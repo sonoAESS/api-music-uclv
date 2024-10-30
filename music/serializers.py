@@ -1,7 +1,7 @@
-from .models import Musica
+from .models import Song
 from rest_framework import serializers
 
-class MusicSerializer(serializers.HyperlinkedModelSerializer):
+class SongSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model=Musica
+        model=Song
         fields=['link','title','artista','album']

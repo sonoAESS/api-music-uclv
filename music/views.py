@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from rest_framework import permissions,generics,filters
-from .serializers import MusicSerializer
-from .models import Musica
+from .serializers import SongSerializer
+from .models import Song
 
-class MusicSearch(generics.ListAPIView):
-    queryset=Musica.objects.all()
-    serializer_class=MusicSerializer
+class SongSearch(generics.ListAPIView):
+    queryset=Song.objects.all()
+    serializer_class=SongSerializer
     permission_classes=[permissions.IsAuthenticated]
     filter_backends=[filters.SearchFilter]
     search_fields = ['$title','$artista','$album']

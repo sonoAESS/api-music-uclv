@@ -1,28 +1,43 @@
-"""
-URL configuration for api_music project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from rest_framework_simplejwt import views as jwt_views
-from music.views import MusicSearch
+from music.views import SongSearch
+from playlist.views import NamelistViewSet, PlaylistViewSet  # Cambia a las vistas
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth',include('rest_framework.urls',namespace='rest_framework')),
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/search/',MusicSearch.as_view(),name='search')
+    path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path(
+        "api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),
+    path(
+        "api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"
+    ),
+    path("api/search/", SongSearch.as_view(), name="search"),
+    # Rutas para las playlists
+    path(
+        "api/playlists/",
+        PlaylistViewSet.as_view({"get": "list", "post": "create"}),
+        name="playlist-list",
+    ),  # Listar y crear playlists
+    path(
+        "api/playlists/<int:pk>/",
+        PlaylistViewSet.as_view(
+            {"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
+        name="playlist-detail",
+    ),  # Obtener, actualizar y eliminar una playlist
+    # Rutas para las namelists
+    path(
+        "api/namelists/",
+        NamelistViewSet.as_view({"get": "list", "post": "create"}),
+        name="namelist-list",
+    ),  # Listar y crear namelists
+    path(
+        "api/namelists/<int:pk>/",
+        NamelistViewSet.as_view(
+            {"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
+        name="namelist-detail",
+    ),  # Obtener, actualizar y eliminar una namelist
 ]
